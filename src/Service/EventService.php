@@ -3,13 +3,10 @@
 namespace App\Service;
 
 use App\Entity\Event;
-use App\Entity\Platform;
 use App\Entity\User;
 use App\Repository\PlatformRepository;
 use App\Repository\UserRepository;
-use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class EventService
 {
@@ -27,10 +24,9 @@ class EventService
         $this->platformRepository = $platformRepository;
     }
 
-
     public function create(
-        int $platformId, 
-        string $startingAt, 
+        int $platformId,
+        string $startingAt,
         string $description,
         string $name,
         array $participants,
@@ -42,7 +38,7 @@ class EventService
         $event->setName($name);
         $event->setMaster($master);
 
-        foreach($participants as $participantId) {
+        foreach ($participants as $participantId) {
             $participant = $this->userRepository->find($participantId);
             $event->addParticipant($participant);
         }
@@ -58,8 +54,8 @@ class EventService
 
     public function edit(
         Event $event,
-        int $platformId, 
-        string $startingAt, 
+        int $platformId,
+        string $startingAt,
         string $description,
         string $name,
         array $participants
@@ -68,7 +64,7 @@ class EventService
         $event->setDescription($description);
         $event->setName($name);
 
-        foreach($participants as $participantId) {
+        foreach ($participants as $participantId) {
             $participant = $this->userRepository->find($participantId);
             $event->addParticipant($participant);
         }

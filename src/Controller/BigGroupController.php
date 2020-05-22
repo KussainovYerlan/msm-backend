@@ -8,19 +8,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
-use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Validator\Constraints as Assert;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
- * Class BigGroupController
+ * Class BigGroupController.
+ *
  * @SWG\Tag(name="Big groups")
  * @Security(name="Bearer")
- * 
+ *
  * @Rest\Route("big-groups")
  * @Rest\View(serializerGroups={"id", "big-group"})
  */
@@ -31,7 +31,7 @@ class BigGroupController extends AbstractFOSRestController
 
     public function __construct(
         BigGroupRepository $bigGroupRepository,
-        EntityManagerInterface $em    
+        EntityManagerInterface $em
     ) {
         $this->bigGroupRepository = $bigGroupRepository;
         $this->em = $em;
@@ -40,6 +40,7 @@ class BigGroupController extends AbstractFOSRestController
     /**
      * List of objects.
      * This call takes into account all objects.
+     *
      * @SWG\Response(
      *     response=200,
      *     description="Returns list of objects",
@@ -48,7 +49,7 @@ class BigGroupController extends AbstractFOSRestController
      *         @SWG\Items(ref=@Model(type=BigGroup::class, groups={"id", "big-group"}))
      *     )
      * )
-     * 
+     *
      * @Rest\Get("")
      */
     public function getBigGroupsAction(): View
@@ -61,13 +62,14 @@ class BigGroupController extends AbstractFOSRestController
     /**
      * Get object.
      * This call takes into account one object.
+     *
      * @SWG\Parameter(name="id", in="query", type="number", description="Id of object")
      * @SWG\Response(
      *     response=200,
      *     description="Returns one object",
      *     @Model(type=BigGroup::class, groups={"id", "big-group"})
      * )
-     * 
+     *
      * @Rest\Get("/{big-group}")
      */
     public function getBigGroupAction(BigGroup $bigGroup): View
@@ -78,13 +80,14 @@ class BigGroupController extends AbstractFOSRestController
     /**
      * Create object.
      * This call creates a new object.
+     *
      * @SWG\Parameter(name="object", in="body", @Model(type=BigGroup::class, groups={"deserialize"}), description="Fields of object")
      * @SWG\Response(
      *     response=200,
      *     description="Returns created object",
      *     @Model(type=BigGroup::class, groups={"id", "big-group"})
      * )
-     * 
+     *
      * @Rest\Post("")
      * @ParamConverter("bigGroup", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
      */
@@ -103,6 +106,7 @@ class BigGroupController extends AbstractFOSRestController
     /**
      * Update object.
      * This call updates the object.
+     *
      * @SWG\Parameter(name="id", in="query", type="number", description="Id of object")
      * @SWG\Parameter(name="object", in="body", @Model(type=BigGroup::class, groups={"deserialize"}), description="Fields of object")
      * @SWG\Response(
@@ -110,7 +114,7 @@ class BigGroupController extends AbstractFOSRestController
      *     description="Returns one object",
      *     @Model(type=BigGroup::class, groups={"id", "big-group"})
      * )
-     * 
+     *
      * @Rest\Put("/{big-group}")
      * @ParamConverter("bigGroup", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
      */
@@ -129,12 +133,13 @@ class BigGroupController extends AbstractFOSRestController
     /**
      * Delete object.
      * This call removes the object.
+     *
      * @SWG\Parameter(name="id", in="query", type="number", description="Id of object")
      * @SWG\Response(
      *     response=200,
      *     description="Returns empty response"
      * )
-     * 
+     *
      * @Rest\Delete("/{big-group}")
      */
     public function deleteBigGroupsAction(BigGroup $bigGroup): View
