@@ -2,8 +2,8 @@ api_login_check:
     path: /api/login_check
 
 platforms:
-    type: rest
     resource: App\Controller\PlatformController
+    type: annotation
     prefix: api
 
 big_groups:

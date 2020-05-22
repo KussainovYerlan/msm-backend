@@ -16,13 +16,14 @@ class Platform
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"id"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 2, max = 255)
-     * @Groups({"deserialize"})
+     * @Groups({"platform", "deserialize"})
      */
     private $name;
 
