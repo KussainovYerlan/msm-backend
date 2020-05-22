@@ -2,9 +2,7 @@
 
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 
 class MailerService
 {
