@@ -31,14 +31,13 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\Email
-     * @Assert\Length(min = 2, max = 255)
-     * @Groups({"user", "deserialize"})
+     * @Assert\Length(min = 2, max = 180)
+     * @Groups({"non_sensitive_data", "deserialize"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"user"})
      */
     private $roles = [];
 
