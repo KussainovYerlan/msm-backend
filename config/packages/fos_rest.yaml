@@ -7,7 +7,7 @@ fos_rest:
   body_converter:
     enabled: true
     validate: true
-    validation_errors_argument: validationErrors # This is the default value
+    validation_errors_argument: validationErrors
   format_listener:
     rules:
       - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [json] }
