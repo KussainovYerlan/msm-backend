@@ -16,7 +16,7 @@ class Platform
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"id"})
+     * @Groups({"id", "id_related_entity"})
      */
     private $id;
 

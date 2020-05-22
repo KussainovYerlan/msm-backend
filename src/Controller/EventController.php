@@ -9,14 +9,13 @@ use App\Service\EventService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\Annotations\RequestParam;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
  * Class EventController.
@@ -25,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Security(name="Bearer")
  *
  * @Rest\Route("events")
- * @Rest\View(serializerGroups={"id", "event"})
+ * @Rest\View(serializerGroups={"id", "event", "platform", "non_sensitive_data"})
  */
 class EventController extends AbstractFOSRestController
 {
@@ -86,30 +85,26 @@ class EventController extends AbstractFOSRestController
      * Create object.
      * This call creates a new object.
      *
+     * @SWG\Parameter(name="object", in="body", @Model(type=Event::class, groups={"deserialize"}), description="Fields of object")
      * @SWG\Response(
      *     response=201,
      *     description="Returns created object",
-     *     @Model(type=Event::class, groups={"id", "event"})
+     *     @Model(type=Event::class, groups={"id", "event", "platform", "non_sensitive_data"})
      * )
      *
      * @Rest\Post("")
-     *
-     * @RequestParam(name="platform", requirements=@Assert\Positive, nullable=false, strict=true, description="Platform id")
-     * @RequestParam(name="startingAt", nullable=false, strict=true, description="Event date and time of start")
-     * @RequestParam(name="description", requirements=@Assert\Length(min = 2, max = 2048), nullable=false, strict=true, description="Event desciption")
-     * @RequestParam(name="name", requirements=@Assert\Length(min = 2, max = 255), nullable=false, strict=true, description="Event name")
-     * @RequestParam(name="participants", nullable=false, strict=true, description="Platform id")
+     * @ParamConverter("event", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
      */
-    public function post(ParamFetcherInterface $paramFetcher): View
+    public function post(Event $event, ConstraintViolationList $validationErrors): View
     {
-        $event = $this->eventService->create(
-            $paramFetcher->get('platform'),
-            $paramFetcher->get('startingAt'),
-            $paramFetcher->get('description'),
-            $paramFetcher->get('name'),
-            $paramFetcher->get('participants'),
-            $this->getUser()
-        );
+        if ($validationErrors->count()) {
+            return $this->view($validationErrors, 400);
+        }
+
+        $event->setMaster($this->getUser());
+
+        $this->em->persist($event);
+        $this->em->flush();
 
         return $this->view($event, Response::HTTP_CREATED);
     }
@@ -118,10 +113,11 @@ class EventController extends AbstractFOSRestController
      * Update object.
      * This call updates the object.
      *
+     * @SWG\Parameter(name="object", in="body", @Model(type=Event::class, groups={"deserialize"}), description="Fields of object")
      * @SWG\Response(
      *     response=200,
-     *     description="Returns one object",
-     *     @Model(type=Event::class, groups={"id", "event"})
+     *     description="Returns updated object",
+     *     @Model(type=Event::class, groups={"id", "event", "platform", "non_sensitive_data"})
      * )
      * @SWG\Response(
      *     response=403,
@@ -129,24 +125,18 @@ class EventController extends AbstractFOSRestController
      * )
      *
      * @Rest\Put("/{id}")
-     * @RequestParam(name="platform", requirements=@Assert\Positive, nullable=false, strict=true, description="Platform id")
-     * @RequestParam(name="startingAt", nullable=false, strict=true, description="Event date and time of start")
-     * @RequestParam(name="description", requirements=@Assert\Length(min = 2, max = 2048), nullable=false, strict=true, description="Event desciption")
-     * @RequestParam(name="name", requirements=@Assert\Length(min = 2, max = 255), nullable=false, strict=true, description="Event name")
-     * @RequestParam(name="participants", nullable=false, strict=true, description="Platform id")
+     * @ParamConverter("event", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
      */
-    public function put(Event $event, ParamFetcherInterface $paramFetcher): View
+    public function put(Event $event, ConstraintViolationList $validationErrors): View
     {
         $this->denyAccessUnlessGranted('edit', $event);
 
-        $event = $this->eventService->edit(
-            $event,
-            $paramFetcher->get('platform'),
-            $paramFetcher->get('startingAt'),
-            $paramFetcher->get('description'),
-            $paramFetcher->get('name'),
-            $paramFetcher->get('participants')
-        );
+        if ($validationErrors->count()) {
+            return $this->view($validationErrors, 400);
+        }
+
+        $this->em->persist($event);
+        $this->em->flush();
 
         return $this->view($event, Response::HTTP_OK);
     }

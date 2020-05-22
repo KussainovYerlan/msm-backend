@@ -23,7 +23,6 @@ class Event
     private $id;
 
     /**
-     * @Assert\DateTime
      * @ORM\ManyToOne(targetEntity=Platform::class)
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"event", "deserialize"})
@@ -63,6 +62,13 @@ class Event
      * @Groups({"event"})
      */
     private $master;
+
+    /**
+     * @Assert\DateTime
+     * @ORM\Column(type="datetime")
+     * @Groups({"event", "deserialize"})
+     */
+    private $endingAt;
 
     public function __construct()
     {
@@ -156,6 +162,18 @@ class Event
     public function setMaster(?User $master): self
     {
         $this->master = $master;
+
+        return $this;
+    }
+
+    public function getEndingAt(): ?\DateTimeInterface
+    {
+        return $this->endingAt;
+    }
+
+    public function setEndingAt(\DateTimeInterface $endingAt): self
+    {
+        $this->endingAt = $endingAt;
 
         return $this;
     }
