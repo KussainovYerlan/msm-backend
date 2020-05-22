@@ -14,5 +14,4 @@ nelmio_api_doc:
             - Bearer: []
     areas:
         path_patterns:
-            - ^/register
-            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
+            - ^/api(?!/doc$)
