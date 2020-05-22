@@ -10,3 +10,8 @@ big_groups:
     resource: App\Controller\BigGroupController
     type: annotation
     prefix: api
+
+events:
+    resource: App\Controller\EventController
+    type: annotation
+    prefix: api

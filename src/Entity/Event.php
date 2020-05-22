@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,34 +18,51 @@ class Event
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"id"})
      */
     private $id;
 
     /**
+     * @Assert\DateTime
      * @ORM\ManyToOne(targetEntity=Platform::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"event", "deserialize"})
      */
     private $platform;
 
     /**
+     * @Assert\DateTime
      * @ORM\Column(type="datetime")
+     * @Groups({"event", "deserialize"})
      */
     private $startingAt;
 
     /**
+     * @Assert\Length(min = 2, max = 2048)
      * @ORM\Column(type="text")
+     * @Groups({"event", "deserialize"})
      */
     private $description;
 
     /**
+     * @Assert\Length(min = 2, max = 255)
      * @ORM\Column(type="string", length=255)
+     * @Groups({"event", "deserialize"})
      */
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
+     * @Groups({"event", "deserialize"})
      */
     private $participants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"event"})
+     */
+    private $master;
 
     public function __construct()
     {
@@ -125,6 +144,18 @@ class Event
         if ($this->participants->contains($participant)) {
             $this->participants->removeElement($participant);
         }
+
+        return $this;
+    }
+
+    public function getMaster(): ?User
+    {
+        return $this->master;
+    }
+
+    public function setMaster(?User $master): self
+    {
+        $this->master = $master;
 
         return $this;
     }
