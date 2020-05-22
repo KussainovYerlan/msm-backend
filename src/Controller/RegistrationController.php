@@ -10,7 +10,11 @@ use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ConstraintViolationList;
 
+/**
+ * @Rest\View(serializerGroups={"id", "user"})
+ */
 class RegistrationController extends AbstractFOSRestController
 {
     private $userService;
@@ -22,12 +26,14 @@ class RegistrationController extends AbstractFOSRestController
 
     /**
      * @Rest\Route("/register", name="register", methods={"POST"})
-     * @Rest\QueryParam(name="email", requirements=@Assert\Email, nullable=false, strict=true, description="User email")
-     * @Rest\QueryParam(name="password", requirements="\w+", nullable=false, strict=true, description="User password")
      * @ParamConverter("user", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
      */
-    public function register(User $user): View
+    public function register(User $user, ConstraintViolationList $validationErrors): View
     {
+        if ($validationErrors->count()) {
+            return $this->view($validationErrors, 400);
+        }
+
         $user = $this->userService->register($user);
 
         return $this->view($user, Response::HTTP_CREATED);

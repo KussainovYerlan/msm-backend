@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -17,21 +18,27 @@ class User implements UserInterface
     public const STATUS_BLOCKED = 'Blocked';
     public const STATUS_ACTIVE = 'Active';
 
+    public const ROLE_USER = 'User';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"id"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"deserialize"})
+     * @Assert\Email
+     * @Assert\Length(min = 2, max = 255)
+     * @Groups({"user", "deserialize"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"user"})
      */
     private $roles = [];
 
@@ -39,6 +46,8 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Groups({"deserialize"})
+     * @Assert\NotBlank
+     * @Assert\Length(min = 6, max = 255)
      */
     private $password;
 
@@ -65,8 +74,6 @@ class User implements UserInterface
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
      * @see UserInterface
      */
     public function getUsername(): string
@@ -80,8 +87,7 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = self::ROLE_USER;
 
         return array_unique($roles);
     }
