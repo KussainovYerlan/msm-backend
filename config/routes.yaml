@@ -1,12 +1,12 @@
-api_register:
-    resource: App\Controller\RegistrationController
-    type: annotation
-    prefix: api
-
 api_login_check:
     path: /api/login_check
 
 platforms:
     type: rest
     resource: App\Controller\PlatformController
+    prefix: api
+
+big_groups:
+    resource: App\Controller\BigGroupController
+    type: annotation
     prefix: api
