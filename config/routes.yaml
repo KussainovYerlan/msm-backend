@@ -11,12 +11,22 @@ platforms:
     type: annotation
     prefix: api
 
-big_groups:
+big-groups:
     resource: App\Controller\BigGroupController
+    type: annotation
+    prefix: api
+
+sub-groups:
+    resource: App\Controller\SubGroupController
     type: annotation
     prefix: api
 
 events:
     resource: App\Controller\EventController
+    type: annotation
+    prefix: api
+
+lessons:
+    resource: App\Controller\LessonController
     type: annotation
     prefix: api

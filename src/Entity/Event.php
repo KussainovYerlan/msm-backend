@@ -18,57 +18,64 @@ class Event
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"id"})
+     * @Groups({"event:read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Platform::class)
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"event", "deserialize"})
+     * @Groups({"event:read", "event:write"})
      */
     private $platform;
 
     /**
-     * @Assert\DateTime
-     * @ORM\Column(type="datetime")
-     * @Groups({"event", "deserialize"})
+     * @Assert\Date
+     * @ORM\Column(type="date")
+     * @Groups({"event:read", "event:write"})
      */
-    private $startingAt;
+    private $date;
 
     /**
      * @Assert\Length(min = 2, max = 2048)
      * @ORM\Column(type="text")
-     * @Groups({"event", "deserialize"})
+     * @Groups({"event:read", "event:write"})
      */
     private $description;
 
     /**
      * @Assert\Length(min = 2, max = 255)
      * @ORM\Column(type="string", length=255)
-     * @Groups({"event", "deserialize"})
+     * @Groups({"event:read", "event:write"})
      */
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
-     * @Groups({"event", "deserialize"})
+     * @Groups({"event:read", "event:write"})
      */
     private $participants;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"event"})
+     * @Groups({"event:read"})
      */
     private $master;
 
     /**
-     * @Assert\DateTime
-     * @ORM\Column(type="datetime")
-     * @Groups({"event", "deserialize"})
+     * @Assert\Time
+     * @ORM\Column(type="time")
+     * @Groups({"event:read", "event:write"})
      */
-    private $endingAt;
+    private $endsAt;
+
+    /**
+     * @Assert\Time
+     * @ORM\Column(type="time")
+     * @Groups({"event:read", "event:write"})
+     */
+    private $startsAt;
 
     public function __construct()
     {
@@ -92,14 +99,14 @@ class Event
         return $this;
     }
 
-    public function getStartingAt(): ?\DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->startingAt;
+        return $this->date;
     }
 
-    public function setStartingAt(\DateTimeInterface $startingAt): self
+    public function setDate(\DateTimeInterface $date): self
     {
-        $this->startingAt = $startingAt;
+        $this->date = $date;
 
         return $this;
     }
@@ -166,15 +173,28 @@ class Event
         return $this;
     }
 
-    public function getEndingAt(): ?\DateTimeInterface
+    public function getStartsAt(): ?\DateTimeInterface
     {
-        return $this->endingAt;
+        return $this->startsAt;
     }
 
-    public function setEndingAt(\DateTimeInterface $endingAt): self
+    public function setStartsAt(\DateTimeInterface $startsAt): self
     {
-        $this->endingAt = $endingAt;
+        $this->startsAt = $startsAt;
 
         return $this;
     }
+
+    public function getEndsAt(): ?\DateTimeInterface
+    {
+        return $this->endsAt;
+    }
+
+    public function setEndsAt(\DateTimeInterface $endsAt): self
+    {
+        $this->endsAt = $endsAt;
+
+        return $this;
+    }
+
 }

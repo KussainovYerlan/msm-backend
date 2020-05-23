@@ -6,61 +6,93 @@ use App\Repository\LessonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=LessonRepository::class)
  */
 class Lesson
 {
+    public const PERIODICITY_MONTHLY = "monthly";
+    public const PERIODICITY_WEEKLY = "weekly";
+    public const PERIODICITY_EVERY_2_WEEK = "every 2 week";
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"lesson:read"})
      */
     private $id;
 
     /**
+     * @Assert\Length(min = 2, max = 255)
      * @ORM\Column(type="string", length=255)
+     * @Groups({"lesson:read", "lesson:write"})
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lesson:read"})
      */
     private $master;
 
     /**
      * @ORM\ManyToOne(targetEntity=Platform::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lesson:read", "lesson:write"})
      */
     private $platform;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @Assert\Date
+     * @ORM\Column(type="date")
+     * @Groups({"lesson:read", "lesson:write"})
      */
-    private $startingAt;
+    private $startDate;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @Assert\Date
+     * @ORM\Column(type="date")
+     * @Groups({"lesson:read", "lesson:write"})
      */
-    private $endingAt;
+    private $endDate;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
+     * @Groups({"lesson:read", "lesson:write"})
      */
     private $participants;
 
     /**
      * @ORM\ManyToOne(targetEntity=SubGroup::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lesson:read", "lesson:write"})
      */
     private $subGroup;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"lesson:read", "lesson:write"})
      */
     private $periodicity;
+
+    /**
+     * @Assert\Time
+     * @ORM\Column(type="time")
+     * @Groups({"lesson:read", "lesson:write"})
+     */
+    private $startsAt;
+
+    /**
+     * @Assert\Time
+     * @ORM\Column(type="time")
+     * @Groups({"lesson:read", "lesson:write"})
+     */
+    private $endsAt;
 
     public function __construct()
     {
@@ -108,26 +140,26 @@ class Lesson
         return $this;
     }
 
-    public function getStartingAt(): ?\DateTimeInterface
+    public function getStartDate(): ?\DateTimeInterface
     {
-        return $this->startingAt;
+        return $this->startDate;
     }
 
-    public function setStartingAt(\DateTimeInterface $startingAt): self
+    public function setStartDate(\DateTimeInterface $startDate): self
     {
-        $this->startingAt = $startingAt;
+        $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getEndingAt(): ?\DateTimeInterface
+    public function getEndDate(): ?\DateTimeInterface
     {
-        return $this->endingAt;
+        return $this->endDate;
     }
 
-    public function setEndingAt(\DateTimeInterface $endingAt): self
+    public function setEndDate(\DateTimeInterface $endDate): self
     {
-        $this->endingAt = $endingAt;
+        $this->endDate = $endDate;
 
         return $this;
     }
@@ -178,6 +210,30 @@ class Lesson
     public function setPeriodicity(string $periodicity): self
     {
         $this->periodicity = $periodicity;
+
+        return $this;
+    }
+
+    public function getStartsAt(): ?\DateTimeInterface
+    {
+        return $this->startsAt;
+    }
+
+    public function setStartsAt(\DateTimeInterface $startsAt): self
+    {
+        $this->startsAt = $startsAt;
+
+        return $this;
+    }
+
+    public function getEndsAt(): ?\DateTimeInterface
+    {
+        return $this->endsAt;
+    }
+
+    public function setEndsAt(\DateTimeInterface $endsAt): self
+    {
+        $this->endsAt = $endsAt;
 
         return $this;
     }

@@ -18,19 +18,20 @@ class BigGroup
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"id"})
+     * @Groups({"big-group:read", "sub-group:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 2, max = 255)
-     * @Groups({"big-group", "deserialize"})
+     * @Groups({"big-group:read", "big-group:write"})
      */
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=SubGroup::class, mappedBy="bigGroup", orphanRemoval=true)
+     * @Groups({"big-group:read"})
      */
     private $subGroups;
 

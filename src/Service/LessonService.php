@@ -2,47 +2,53 @@
 
 namespace App\Service;
 
-use App\Entity\Event;
-use App\Repository\EventRepository;
+use App\Entity\Lesson;
+use App\Repository\LessonRepository;
 use App\Repository\PlatformRepository;
+use App\Repository\SubGroupRepository;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
-class EventService
+class LessonService
 {
     private EntityManagerInterface $em;
     private UserRepository $userRepository;
     private PlatformRepository $platformRepository;
-    private EventRepository $eventRepository;
+    private LessonRepository $lessonRepository;
+    private SubGroupRepository $subGroupRepository;
     private WeekService $weekService;
 
     public function __construct(
         EntityManagerInterface $em,
         UserRepository $userRepository,
         PlatformRepository $platformRepository,
-        EventRepository $eventRepository,
+        LessonRepository $lessonRepository,
+        SubGroupRepository $subGroupRepository,
         WeekService $weekService
     ) {
         $this->em = $em;
         $this->userRepository = $userRepository;
         $this->platformRepository = $platformRepository;
-        $this->eventRepository = $eventRepository;
+        $this->lessonRepository = $lessonRepository;
+        $this->subGroupRepository = $subGroupRepository;
         $this->weekService = $weekService;
     }
 
     public function filteredSearch(
         int $userId,
         int $platformId,
+        int $subGroupId,
         int $week,
         int $year
     ): Array {
-        $eventFilter = [
+        $lessonFilter = [
             'user' => $this->userRepository->find($userId),
             'platform' => $this->platformRepository->find($platformId),
-            'date' => $week && $year? $this->weekService->weekInfo($week, $year) : null,
+            'subGroup' => $this->subGroupRepository->find($subGroupId),
+            'date' => $week && $year ? $this->weekService->weekInfo($week, $year) : null,
         ];
 
-        return $this->eventRepository->filteredSearch($eventFilter);
+        return $this->lessonRepository->filteredSearch($lessonFilter);
     }
 }

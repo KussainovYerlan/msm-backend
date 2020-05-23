@@ -19,32 +19,32 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    // /**
-    //  * @return Event[] Returns an array of Event objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function filteredSearch(Array $filter)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('e');
 
-    /*
-    public function findOneBySomeField($value): ?Event
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (isset($filter['user'])) {
+            $qb
+                ->andWhere('e.master = :user')
+                ->setParameter('user', $filter['user'])
+            ;
+        }
+
+        if (isset($filter['platform'])) {
+            $qb
+                ->andWhere('e.platform = :platform')
+                ->setParameter('platform', $filter['platform'])
+            ;
+        }
+
+        if (isset($filter['date'])) {
+            $qb
+                ->andWhere('e.date >= :startDate AND e.date <= :endDate')
+                ->setParameter('startDate', $filter['date']['startDate'])
+                ->setParameter('endDate', $filter['date']['endDate'])
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }

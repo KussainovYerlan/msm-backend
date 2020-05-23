@@ -19,7 +19,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
  * @SWG\Tag(name="Register")
  * @Rest\Route("register")
  *
- * @Rest\View(serializerGroups={"id", "non_sensitive_data"})
+ * @Rest\View(serializerGroups={"serialize"})
  */
 class RegistrationController extends AbstractFOSRestController
 {
@@ -38,7 +38,7 @@ class RegistrationController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=201,
      *     description="Returns created object",
-     *     @Model(type=User::class, groups={"id", "non_sensitive_data"})
+     *     @Model(type=User::class, groups={"serialize"})
      * )
      *
      * @Rest\Post("")

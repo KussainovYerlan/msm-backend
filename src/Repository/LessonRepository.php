@@ -19,32 +19,38 @@ class LessonRepository extends ServiceEntityRepository
         parent::__construct($registry, Lesson::class);
     }
 
-    // /**
-    //  * @return Lesson[] Returns an array of Lesson objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function filteredSearch(Array $filter)
     {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('l');
 
-    /*
-    public function findOneBySomeField($value): ?Lesson
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (isset($filter['user'])) {
+            $qb
+                ->andWhere('l.master = :user')
+                ->setParameter('user', $filter['user'])
+            ;
+        }
+
+        if (isset($filter['platform'])) {
+            $qb
+                ->andWhere('l.platform = :platform')
+                ->setParameter('platform', $filter['platform'])
+            ;
+        }
+
+        if (isset($filter['date'])) {
+            $qb
+                ->andWhere('l.periodicity = :weekly 
+                    OR MOD(WEEK(l.startDate),2) = MOD(:week, 2) AND l.periodicity = :every2week 
+                    OR DAY(l.startDate) >= DAY(:startDate) AND DAY(l.startDate) <= DAY(:endDate) AND l.periodicity = :monthly')
+                ->setParameter('weekly', Lesson::PERIODICITY_WEEKLY)
+                ->setParameter('monthly', Lesson::PERIODICITY_MONTHLY)
+                ->setParameter('every2week', Lesson::PERIODICITY_EVERY_2_WEEK)
+                ->setParameter('week', $filter['date']['number'])
+                ->andWhere('l.endDate <= :endDate')
+                ->setParameter('endDate', $filter['date']['endDate'])
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }

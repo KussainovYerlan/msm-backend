@@ -22,7 +22,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
  * @Security(name="Bearer")
  *
  * @Rest\Route("big-groups")
- * @Rest\View(serializerGroups={"id", "big-group"})
+ * @Rest\View(serializerGroups={"big-group:read", "sub-group:read"})
  */
 class BigGroupController extends AbstractFOSRestController
 {
@@ -46,7 +46,7 @@ class BigGroupController extends AbstractFOSRestController
      *     description="Returns list of objects",
      *     @SWG\Schema(
      *         type="array",
-     *         @SWG\Items(ref=@Model(type=BigGroup::class, groups={"id", "big-group"}))
+     *         @SWG\Items(ref=@Model(type=BigGroup::class, groups={"big-group:read", "sub-group:read"}))
      *     )
      * )
      *
@@ -67,7 +67,7 @@ class BigGroupController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns one object",
-     *     @Model(type=BigGroup::class, groups={"id", "big-group"})
+     *     @Model(type=BigGroup::class, groups={"big-group:read", "sub-group:read"})
      * )
      *
      * @Rest\Get("/{big-group}")
@@ -81,15 +81,15 @@ class BigGroupController extends AbstractFOSRestController
      * Create object.
      * This call creates a new object.
      *
-     * @SWG\Parameter(name="object", in="body", @Model(type=BigGroup::class, groups={"deserialize"}), description="Fields of object")
+     * @SWG\Parameter(name="object", in="body", @Model(type=BigGroup::class, groups={"big-group:write"}), description="Fields of object")
      * @SWG\Response(
      *     response=200,
      *     description="Returns created object",
-     *     @Model(type=BigGroup::class, groups={"id", "big-group"})
+     *     @Model(type=BigGroup::class, groups={"big-group:read", "sub-group:read"})
      * )
      *
      * @Rest\Post("")
-     * @ParamConverter("bigGroup", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
+     * @ParamConverter("bigGroup", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"big-group:write"}}})
      */
     public function postBigGroupsAction(BigGroup $bigGroup, ConstraintViolationList $validationErrors): View
     {
@@ -108,15 +108,15 @@ class BigGroupController extends AbstractFOSRestController
      * This call updates the object.
      *
      * @SWG\Parameter(name="id", in="query", type="number", description="Id of object")
-     * @SWG\Parameter(name="object", in="body", @Model(type=BigGroup::class, groups={"deserialize"}), description="Fields of object")
+     * @SWG\Parameter(name="object", in="body", @Model(type=BigGroup::class, groups={"big-group:write"}), description="Fields of object")
      * @SWG\Response(
      *     response=200,
      *     description="Returns one object",
-     *     @Model(type=BigGroup::class, groups={"id", "big-group"})
+     *     @Model(type=BigGroup::class, groups={"big-group:read", "sub-group:read"})
      * )
      *
      * @Rest\Put("/{big-group}")
-     * @ParamConverter("bigGroup", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
+     * @ParamConverter("bigGroup", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"big-group:write"}}})
      */
     public function putBigGroupsAction(BigGroup $bigGroup, ConstraintViolationList $validationErrors): View
     {
