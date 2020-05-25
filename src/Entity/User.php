@@ -24,7 +24,7 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"serialize", "event:write", "lesson:write"})
+     * @Groups({"user:read", "event:write", "lesson:write"})
      */
     private $id;
 
@@ -32,7 +32,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\Email
      * @Assert\Length(min = 2, max = 180)
-     * @Groups({"serialize", "deserialize"})
+     * @Groups({"user:read", "deserialize"})
      */
     private $email;
 

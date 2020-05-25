@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Security(name="Bearer")
  *
  * @Rest\Route("lessons")
- * @Rest\View(serializerGroups={"lesson:read", "id", "platform", "non_sensitive_data"})
+ * @Rest\View(serializerGroups={"lesson:read", "user:read", "platform:read", "sub-group:read", "big-group:read"})
  */
 class LessonController extends AbstractFOSRestController
 {
@@ -55,7 +55,7 @@ class LessonController extends AbstractFOSRestController
      *     description="Returns list of objects",
      *     @SWG\Schema(
      *         type="array",
-     *         @SWG\Items(ref=@Model(type=Lesson::class, groups={"id", "lesson"}))
+     *         @SWG\Items(ref=@Model(type=Lesson::class, groups={"lesson:read", "user:read", "platform:read", "sub-group:read", "big-group:read"}))
      *     )
      * )
      *
@@ -86,7 +86,7 @@ class LessonController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns one object",
-     *     @Model(type=Lesson::class, groups={"id", "lesson"})
+     *     @Model(type=Lesson::class, groups={"lesson:read", "user:read", "platform:read", "sub-group:read", "big-group:read"})
      * )
      *
      * @Rest\Get("/{id}")
@@ -100,15 +100,15 @@ class LessonController extends AbstractFOSRestController
      * Create object.
      * This call creates a new object.
      *
-     * @SWG\Parameter(name="object", in="body", @Model(type=Lesson::class, groups={"lesson:write", "id_related_entity"}), description="Fields of object")
+     * @SWG\Parameter(name="object", in="body", @Model(type=Lesson::class, groups={"lesson:write"}), description="Fields of object")
      * @SWG\Response(
      *     response=201,
      *     description="Returns created object",
-     *     @Model(type=Lesson::class, groups={"lesson:read", "id", "platform", "non_sensitive_data"})
+     *     @Model(type=Lesson::class, groups={"lesson:read", "user:read", "platform:read", "sub-group:read", "big-group:read"})
      * )
      *
      * @Rest\Post("")
-     * @ParamConverter("lesson", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"lesson:write", "id_related_entity"}}})
+     * @ParamConverter("lesson", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"lesson:write"}}})
      */
     public function post(Lesson $lesson, ConstraintViolationList $validationErrors): View
     {
@@ -128,11 +128,11 @@ class LessonController extends AbstractFOSRestController
      * Update object.
      * This call updates the object.
      *
-     * @SWG\Parameter(name="object", in="body", @Model(type=Lesson::class, groups={"lesson:write", "id_related_entity"}), description="Fields of object")
+     * @SWG\Parameter(name="object", in="body", @Model(type=Lesson::class, groups={"lesson:write"}), description="Fields of object")
      * @SWG\Response(
      *     response=200,
      *     description="Returns updated object",
-     *     @Model(type=Lesson::class, groups={"lesson:read", "id", "platform", "non_sensitive_data"})
+     *     @Model(type=Lesson::class, groups={"lesson:read", "user:read", "platform:read", "sub-group:read", "big-group:read"})
      * )
      * @SWG\Response(
      *     response=403,
@@ -140,7 +140,7 @@ class LessonController extends AbstractFOSRestController
      * )
      *
      * @Rest\Put("/{id}")
-     * @ParamConverter("lesson", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"lesson:write", "id_related_entity"}}})
+     * @ParamConverter("lesson", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"lesson:write"}}})
      */
     public function put(Lesson $lesson, ConstraintViolationList $validationErrors): View
     {

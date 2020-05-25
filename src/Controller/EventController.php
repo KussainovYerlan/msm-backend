@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Security(name="Bearer")
  *
  * @Rest\Route("events")
- * @Rest\View(serializerGroups={"event:read", "platform:read", "serialize"})
+ * @Rest\View(serializerGroups={"event:read", "platform:read", "user:read"})
  */
 class EventController extends AbstractFOSRestController
 {
@@ -53,7 +53,7 @@ class EventController extends AbstractFOSRestController
      *     description="Returns list of objects",
      *     @SWG\Schema(
      *         type="array",
-     *         @SWG\Items(ref=@Model(type=Event::class, groups={"event:read", "platform:read", "serialize"}))
+     *         @SWG\Items(ref=@Model(type=Event::class, groups={"event:read", "platform:read", "user:read"}))
      *     )
      * )
      * 
@@ -82,7 +82,7 @@ class EventController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns one object",
-     *     @Model(type=Event::class, groups={"event:read", "platform:read", "serialize"})
+     *     @Model(type=Event::class, groups={"event:read", "platform:read", "user:read"})
      * )
      *
      * @Rest\Get("/{id}")
@@ -100,7 +100,7 @@ class EventController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=201,
      *     description="Returns created object",
-     *     @Model(type=Event::class, groups={"event:read", "platform:read", "serialize"})
+     *     @Model(type=Event::class, groups={"event:read", "platform:read", "user:read"})
      * )
      *
      * @Rest\Post("")
@@ -128,7 +128,7 @@ class EventController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns updated object",
-     *     @Model(type=Event::class, groups={"event:read", "platform:read", "serialize"})
+     *     @Model(type=Event::class, groups={"event:read", "platform:read", "user:read"})
      * )
      * @SWG\Response(
      *     response=403,
