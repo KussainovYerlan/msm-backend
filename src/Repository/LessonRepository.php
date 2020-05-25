@@ -46,8 +46,9 @@ class LessonRepository extends ServiceEntityRepository
                 ->setParameter('monthly', Lesson::PERIODICITY_MONTHLY)
                 ->setParameter('every2week', Lesson::PERIODICITY_EVERY_2_WEEK)
                 ->setParameter('week', $filter['date']['number'])
-                ->andWhere('l.endDate <= :endDate')
+                ->andWhere('l.endDate >= :endDate')
                 ->setParameter('endDate', $filter['date']['endDate'])
+                ->setParameter('startDate', $filter['date']['startDate'])
             ;
         }
 

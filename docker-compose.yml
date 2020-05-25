@@ -3,7 +3,7 @@ version: '3'
 services:
     db:
         container_name: db
-        image: mysql:5.7
+        image: mariadb:10.5
         ports:
             - 33061:3306
         restart: always
