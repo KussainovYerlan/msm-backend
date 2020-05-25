@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @Security(name="Bearer")
  *
  * @Rest\Route("platforms")
- * @Rest\View(serializerGroups={"id", "platform"})
+ * @Rest\View(serializerGroups={"platform:read"})
  */
 class PlatformController extends AbstractFOSRestController
 {
@@ -45,7 +45,7 @@ class PlatformController extends AbstractFOSRestController
      *     description="Returns list of objects",
      *     @SWG\Schema(
      *         type="array",
-     *         @SWG\Items(ref=@Model(type=Platform::class, groups={"id", "platform"}))
+     *         @SWG\Items(ref=@Model(type=Platform::class, groups={"platform:read"}))
      *     )
      * )
      *
@@ -65,7 +65,7 @@ class PlatformController extends AbstractFOSRestController
      * @SWG\Response(
      *     response=200,
      *     description="Returns one object",
-     *     @Model(type=Platform::class, groups={"id", "platform"})
+     *     @Model(type=Platform::class, groups={"platform:read"})
      * )
      *
      * @Rest\Get("/{id}")
@@ -79,15 +79,15 @@ class PlatformController extends AbstractFOSRestController
      * Create object.
      * This call creates a new object.
      *
-     * @SWG\Parameter(name="object", in="body", @Model(type=Platform::class, groups={"deserialize"}), description="Fields of object")
+     * @SWG\Parameter(name="object", in="body", @Model(type=Platform::class, groups={"platform:write"}), description="Fields of object")
      * @SWG\Response(
      *     response=201,
      *     description="Returns created object",
-     *     @Model(type=Platform::class, groups={"id", "platform"})
+     *     @Model(type=Platform::class, groups={"platform:read"})
      * )
      *
      * @Rest\Post("")
-     * @ParamConverter("platform", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
+     * @ParamConverter("platform", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"platform:write"}}})
      */
     public function post(Platform $platform): View
     {
@@ -101,15 +101,15 @@ class PlatformController extends AbstractFOSRestController
      * Update object.
      * This call updates the object.
      *
-     * @SWG\Parameter(name="object", in="body", @Model(type=Platform::class, groups={"deserialize"}), description="Fields of object")
+     * @SWG\Parameter(name="object", in="body", @Model(type=Platform::class, groups={"platform:write"}), description="Fields of object")
      * @SWG\Response(
      *     response=200,
      *     description="Returns one object",
-     *     @Model(type=Platform::class, groups={"id", "platform"})
+     *     @Model(type=Platform::class, groups={"platform:read"})
      * )
      *
      * @Rest\Put("/{id}")
-     * @ParamConverter("platform", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"deserialize"}}})
+     * @ParamConverter("platform", converter="fos_rest.request_body", options={"deserializationContext": {"groups": {"platform:write"}}})
      */
     public function put(Platform $platform): View
     {
